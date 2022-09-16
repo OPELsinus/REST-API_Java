@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="${title}"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet"  href="/static/core.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link th:href="@{/core.css}" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container-fluid p-0 nav-bar">
+  <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3">
+    <a href="index.html" class="navbar-brand px-lg-4 m-0">
+      <h1 class="m-0 display-5 text-white">Утилизация отходов</h1>
+    </a>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+      <div class="navbar-nav ml-auto p-4" style="font-size: 16px; margin-left: 10%">
+        <a href="/" class="nav-item nav-link active" style="padding-left: 20px">Главная</a>
+        <a href="/instructions" class="nav-item nav-link" style="padding-left: 20px">Инструкция</a>
+        <a href="/add" class="nav-item nav-link" style="padding-left: 20px">Добавление данных</a>
+        <a href="/show" class="nav-item nav-link" style="padding-left: 20px">Просмотр записей</a>
+        <div th:switch="${#lists.isEmpty(user)}" class="log-reg">
+                      <span th:case="${false}">
+                          <a href="#" class="nav-item nav-link" style="padding-left: 20px">
+                            <span th:each="el, ind : ${user}" th:text="${el} + ' '" th:if="${ind.index} == 2 or ${ind.index} == 3"/>
+                          </a>
+                      </span>
+          <span th:case="${true}"><a href="/login" class="nav-item nav-link" style="padding-left: 20px">Вход/регистрация</a></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+
+<form class="data_input" action="add" method="post">
+  <div class="left-side">
+    <div class="form-group">
+      <span class="left-side-title">Ввод данных</span>
+    </div>
+    <div class="form-group">
+      <label for="wasteType">Вид отходов</label>
+      <input type="text" class="form-control" id="wasteType" name="wasteType" aria-describedby="wasteHelp" placeholder="Вид отходов">
+      <small id="wasteHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+      <label for="wasteAmount">Количество отходов</label>
+      <input type="text" class="form-control" id="wasteAmount" name="wasteAmount" placeholder="Количество отходов">
+    </div>
+
+    <div class="form-group">
+      <label for="creationDate">Дата образования</label>
+      <input type="date" class="form-control" date-date-dormat="DD.MM.YYYY" id="creationDate" name="creationDate" placeholder="Дата образования">
+    </div>
+
+    <div class="form-group">
+      <label for="exportDate">Дата вывоза</label>
+      <input type="date" class="form-control" id="exportDate" name="exportDate" placeholder="Дата вывоза">
+    </div>
+    <p><br></p>
+  </div>
+
+  <div class="line"/>
+
+  <div class="right_side form-group">
+    <div class="sys_info">
+      <span class="sys-title">Системные данные</span>
+      <div th:switch="${#lists.isEmpty(user)}" class="info">
+        <span class="user-name">Пользователь:</span>
+        <span th:case="${false}">
+          <span th:each="el, ind : ${user}" th:if="${ind.index} == 0">
+            <span th:text="${el}"/>
+            <input type="hidden" th:attr="value=${el}" id="owner" name="owner" class="form-control"/>
+          </span>
+
+          <br><br>
+          <span class="name">Имя пользователя: </span>
+          <span th:each="el, ind : ${user}" th:text="${el} + ' '" th:if="${ind.index} == 2 or ${ind.index} == 3"/>
+        </span>
+        <span th:case="${true}"><a href="/login">Войти</a></span>
+      </div>
+      <br>
+      <span>Системное время:</span>
+      <span class="time_now">
+        <span th:text="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm:ss')}"></span>
+        <input type="hidden" th:attr="value=${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm:ss')}" id="requestCreatedDate" name="requestCreatedDate" class="form-control"/>
+      </span>
+    </div>
+
+    <div th:switch="${#lists.isEmpty(user)}">
+      <span th:case="${false}">
+          <div class="submit addButt">
+            <button type="submit" class="btn btn-primary" style="font-size: 16px;">Отправить</button>
+          </div>
+      </span>
+    </div>
+
+  </div>
+
+  <!--        <div class="form-check">-->
+  <!--            <input type="checkbox" class="form-check-input" id="exampleCheck1">-->
+  <!--            <label class="form-check-label" for="exampleCheck1">Check me out</label>-->
+  <!--        </div>-->
+
+</form>
+
+<link rel="stylesheet" href="css/bootstrap.min.css"/>
+<!-- 2. Подключить CSS-файл библиотеки Bootstrap 3 DateTimePicker -->
+<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+
+<!-- 3. Подключить библиотеку jQuery -->
+<script src="js/jquery.min.js"></script>
+<!-- 4. Подключить библиотеку moment -->
+<script src="js/moment-with-locales.min.js"></script>
+<!-- 5. Подключить js-файл фреймворка Bootstrap 3 -->
+<script src="js/bootstrap.min.js"></script>
+<!-- 6. Подключить js-файл библиотеки Bootstrap 3 DateTimePicker -->
+<script src="js/bootstrap-datetimepicker.min.js"></script>
+
+<script>
+    $(function () {
+        $('#datetimepicker').datetimepicker({
+            locale: 'ru'
+        });
+    });
+</script>
+</body>
+</html>

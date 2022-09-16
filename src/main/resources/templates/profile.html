@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title th:text="${title}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet"  href="/static/core.css">
+    <link th:href="@{/core.css}" rel="stylesheet"/>
+    <link th:href="@{/profile.css}" rel="stylesheet"/>
+    <script src="/edit.js" type="text/javascript"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none" style="font-size: 40px;">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+            <span class="fs-4" style="font-size: 40px"><span style="font-size: 26px">Утилизация отходов</span></span>
+        </a>
+
+        <ul class="nav nav-pills">
+            <li class="nav-item"><a href="home" class="nav-link">Главная</a></li>
+            <li class="nav-item"><a href="add" class="nav-link">Добавление данных</a></li>
+            <li class="nav-item"><a href="instructions" class="nav-link">Инструкция</a></li>
+            <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Просмотр записей</a></li>
+            <li class="nav-item">
+                <div th:switch="${#lists.isEmpty(user)}" class="log-reg">
+                      <span th:case="${false}">
+                          <a href="#" class="nav-link">
+                            <span th:each="el, ind : ${user}" th:text="${el} + ' '" th:if="${ind.index} == 2 or ${ind.index} == 3"/>
+                          </a>
+                      </span>
+                    <span th:case="${true}"><a href="username" class="nav-link">Вход/регистрация</a></span>
+                </div>
+            </li>
+        </ul>
+
+    </header>
+</div>
+
+<section class="section about-section gray-bg" id="about">
+    <div class="container">
+        <div class="row align-items-center flex-row-reverse">
+            <div class="col-lg-6">
+                <div class="about-text go-to">
+                    <h3 class="dark-color">About Me</h3>
+                    <h6 class="theme-color lead">A Lead UX &amp; UI designer based in Canada</h6>
+                    <p>I <mark>design and develop</mark> services for customers of all sizes, specializing in creating stylish, modern websites, web services and online stores. My passion is to design digital user experiences through the bold interface and meaningful interactions.</p>
+                    <div class="row about-list">
+                        <div class="col-md-6">
+                            <div class="media">
+                                <label>Birthday</label>
+                                <p>4th april 1998</p>
+                            </div>
+                            <div class="media">
+                                <label>Age</label>
+                                <p>22 Yr</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="media">
+                                <label>E-mail</label>
+                                <p>info@domain.com</p>
+                            </div>
+                            <div class="media">
+                                <label>Phone</label>
+                                <p>820-885-3321</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-avatar">
+                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" title="" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="counter">
+            <div class="row">
+                <div class="col-6 col-lg-3">
+                    <div class="count-data text-center">
+                        <h6 class="count h2" data-to="500" data-speed="500">500</h6>
+                        <p class="m-0px font-w-600">Happy Clients</p>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="count-data text-center">
+                        <h6 class="count h2" data-to="150" data-speed="150">150</h6>
+                        <p class="m-0px font-w-600">Project Completed</p>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="count-data text-center">
+                        <h6 class="count h2" data-to="850" data-speed="850">850</h6>
+                        <p class="m-0px font-w-600">Photo Capture</p>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="count-data text-center">
+                        <h6 class="count h2" data-to="190" data-speed="190">190</h6>
+                        <p class="m-0px font-w-600">Telephonic Talk</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<link rel="stylesheet" href="css/bootstrap.min.css"/>
+<!-- 2. Подключить CSS-файл библиотеки Bootstrap 3 DateTimePicker -->
+<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+
+<!-- 3. Подключить библиотеку jQuery -->
+<script src="js/jquery.min.js"></script>
+<!-- 4. Подключить библиотеку moment -->
+<script src="js/moment-with-locales.min.js"></script>
+<!-- 5. Подключить js-файл фреймворка Bootstrap 3 -->
+<script src="js/bootstrap.min.js"></script>
+<!-- 6. Подключить js-файл библиотеки Bootstrap 3 DateTimePicker -->
+<script src="js/bootstrap-datetimepicker.min.js"></script>
+
+</body>
+</html>

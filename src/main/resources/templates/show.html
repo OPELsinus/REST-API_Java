@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title th:text="${title}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet"  href="/static/core.css">
+    <link th:href="@{/core.css}" rel="stylesheet" />
+    <link th:href="@{/core.scss}" rel="stylesheet" />
+    <script src="/edit.js" type="text/javascript"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+</head>
+<body>
+<!--<div class="container">-->
+<!--    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">-->
+<!--        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none" style="font-size: 40px;">-->
+<!--            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>-->
+<!--            <span class="fs-4" style="font-size: 40px"><span style="font-size: 26px">Утилизация отходов</span></span>-->
+<!--        </a>-->
+
+<!--        <ul class="nav nav-pills">-->
+<!--            <li class="nav-item"><a href="home" class="nav-link">Главная</a></li>-->
+<!--            <li class="nav-item"><a href="add" class="nav-link">Добавление данных</a></li>-->
+<!--            <li class ="nav-item"><a href="instructions" class="nav-link">Инструкция</a></li>-->
+<!--            <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Просмотр записей</a></li>-->
+<!--            <li class="nav-item">-->
+<!--                <div th:switch="${#lists.isEmpty(user)}" class="log-reg">-->
+<!--                      <span th:case="${false}">-->
+<!--                          <a href="#" class="nav-link">-->
+<!--                            <span th:each="el, ind : ${user}" th:text="${el} + ' '" th:if="${ind.index} == 2 or ${ind.index} == 3"/>-->
+<!--                          </a>-->
+<!--                      </span>-->
+<!--                    <span th:case="${true}"><a href="username" class="nav-link">Вход/регистрация</a></span>-->
+<!--                </div>-->
+<!--            </li>-->
+<!--        </ul>-->
+
+<!--    </header>-->
+<!--</div>-->
+<div class="container-fluid p-0 nav-bar">
+    <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3">
+        <a href="index.html" class="navbar-brand px-lg-4 m-0">
+            <h1 class="m-0 display-5 text-white">Утилизация отходов</h1>
+        </a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+            <div class="navbar-nav ml-auto p-4" style="font-size: 16px; margin-left: 10%">
+                <a href="/" class="nav-item nav-link active" style="padding-left: 20px">Главная</a>
+                <a href="/instructions" class="nav-item nav-link" style="padding-left: 20px">Инструкция</a>
+                <a href="/add" class="nav-item nav-link" style="padding-left: 20px">Добавление данных</a>
+                <a href="/show" class="nav-item nav-link" style="padding-left: 20px">Просмотр записей</a>
+                <div th:switch="${#lists.isEmpty(user)}" class="log-reg">
+                      <span th:case="${false}">
+                          <a href="#" class="nav-item nav-link" style="padding-left: 20px">
+                            <span th:each="el, ind : ${user}" th:text="${el} + ' '" th:if="${ind.index} == 2 or ${ind.index} == 3"/>
+                          </a>
+                      </span>
+                    <span th:case="${true}"><a href="/login" class="nav-item nav-link" style="padding-left: 20px">Вход/регистрация</a></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!--<form action="show/my" method="post">-->
+
+<!--    <button type="submit" >Submit</button>-->
+<!--</form>-->
+
+<section>
+    <h1>Таблица учёта отходов</h1>
+    <div>
+        <h3>Фильтры</h3>
+        <label for="dog-names">Выберите пользователя:</label>
+        <select name="dog-names" id="dog-names" onchange="getOnlyMineBySelect(value)">
+            <option value="no">Не выбрано</option>
+            <option th:each="el, ind : ${allUsers}" th:data-parameter="${el.username}" th:attr="value=${el.username}" th:onclick="getOnlyMine(this.getAttribute('data-parameter'))" th:text="${el.first_name} + ' ' + ${el.last_name} + ' (' + ${el.username} + ')'"></option>
+        </select>
+        <br>
+        <span th:each="el, ind : ${user}" th:if="${ind.index} == 0">
+            <label for="getonlymine">Показать только мои записи: </label>
+            <input type="checkbox" th:data-parameter="${el}" th:onclick="getOnlyMine(this.getAttribute('data-parameter'));" name="getonlymine" id="getonlymine" th:checked="*{getonlymine}">
+        </span>
+    </div>
+<!--    <span th:text="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm:ss') - {['2022-01-01 01:00:00']}}"></span>-->
+    <div class="tbl-header">
+
+        <table cellpadding="0" cellspacing="0" border="0">
+            <thead>
+            <tr>
+                <th style="width: 5%; border: solid red 0px">ID</th>
+                <th>Создатель
+                    <br>
+<!--                    <label for="owners-list" style="font-size: 8px;">Выберите пользователя:</label>-->
+                    <select id="owners-list" onchange="getOnlyMineBySelect(value)" style="border-radius: 10px; width: 60%; font-size:8px; color: black;">
+                        <option value="no">Не выбрано</option>
+                        <option th:each="el, ind : ${allUsers}" th:data-parameter="${el.username}" th:attr="value=${el.username}" th:onclick="getOnlyMine(this.getAttribute('data-parameter'))" th:text="${el.first_name} + ' ' + ${el.last_name} + ' (' + ${el.username} + ')'"></option>
+                    </select>
+                </th>
+                <th>Дата создания запроса
+                    <br>
+                    <!--                    <label for="owners-list" style="font-size: 8px;">Выберите пользователя:</label>-->
+                    <select id="req-created-list" onchange="getDateDiff(value, 'requestCreatedDateSpan')" style="border-radius: 10px; width: 60%; font-size:8px; color: black;">
+                        <option value="no">Не выбрано</option>
+                        <option value="1">1 день</option>
+                        <option value="7">7 дней</option>
+                        <option value="30">30 дней</option>
+                        <option value="180">180 дней</option>
+                        <option value="365">1 год</option>
+                    </select>
+                </th>
+                <th>Вид отходов
+                    <br>
+                    <!--                    <label for="owners-list" style="font-size: 8px;">Выберите пользователя:</label>-->
+                    <select id="waste-type-list" onchange="getWasteByTypeOrAmount(value, 'wasteTypeSpan')" style="border-radius: 10px;  width: 60%; font-size:8px; color: black;">
+                        <option value="no">Не выбрано</option>
+                        <option th:each="el, ind : ${uniqueWasteType}" th:data-parameter="${el}" th:attr="value=${el}" th:onclick="getWasteByTypeOrAmount(this.getAttribute('data-parameter'), )" th:text="${el}"></option>
+                    </select>
+                </th>
+                <th>Количество отходов
+                    <br>
+                    <!--                    <label for="owners-list" style="font-size: 8px;">Выберите пользователя:</label>-->
+                    <select id="waste-amount-list" onchange="getWasteByTypeOrAmount(value, 'wasteAmountSpan')" style="border-radius: 10px;  width: 60%; font-size:8px; color: black;">
+                        <option value="no">Не выбрано</option>
+                        <option th:each="el, ind : ${uniqueWasteAmount}" th:data-parameter="${el}" th:attr="value=${el}" th:onclick="getOnlyMine(this.getAttribute('data-parameter'))" th:text="${el}"></option>
+                    </select>
+                </th>
+                <th>Дата появления<br>
+                    <!--                    <label for="owners-list" style="font-size: 8px;">Выберите пользователя:</label>-->
+                    <select id="creation-list" onchange="getDateDiff(value, 'wasteCreationDateSpan')" style="border-radius: 10px; width: 60%; font-size:8px; color: black;">
+                        <option value="no">Не выбрано</option>
+                        <option value="1">1 день</option>
+                        <option value="7">7 дней</option>
+                        <option value="30">30 дней</option>
+                        <option value="180">180 дней</option>
+                        <option value="365">1 год</option>
+                    </select>
+                </th>
+                <th>Дата вывоза
+                    <br>
+                    <!--                    <label for="owners-list" style="font-size: 8px;">Выберите пользователя:</label>-->
+                    <select id="export-list" onchange="getDateDiff(value, 'wasteExportDateSpan')" style="border-radius: 10px; width: 60%; font-size:8px; color: black;">
+                        <option value="no">Не выбрано</option>
+                        <option value="1">1 день</option>
+                        <option value="7">7 дней</option>
+                        <option value="30">30 дней</option>
+                        <option value="180">180 дней</option>
+                        <option value="365">1 год</option>
+                    </select>
+                </th>
+                <th>Редактирование</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="tbl-content">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+
+            <tr th:each="el : ${wastes}" th:attr="id='tr' + ${el.id}">
+                <form class="data_input" method="post" th:object="${wasteDto}">
+                    <td style="width: 5%; border: solid red 0px"><span th:text="${el.id}" th:attr="id='wasteIdSpan' + ${el.id}"></span><input type="hidden" th:attr="value=${el.id}, id='id' + ${el.id}" class="form-control" name="id"></td>
+                    <td><span th:text="${el.owner}" th:attr="id='ownerSpan' + ${el.id}"></span><input type="hidden" th:attr="value=${el.owner}, id='owner' + ${el.id}" class="form-control" name="owner"></td>
+                    <td><span th:text="${el.requestCreatedDate}" th:attr="id='requestCreatedDateSpan' + ${el.id}"></span><input type="hidden" th:attr="value=${el.requestCreatedDate}, id='requestCreatedDate' + ${el.id}" class="form-control" name="requestCreatedDate"></td>
+                    <td><span th:text="${el.wasteType}" th:attr="id='wasteTypeSpan' + ${el.id}"></span><input type="hidden" th:attr="value=${el.wasteType}, id='wasteType' + ${el.id}" class="form-control" name="wasteType"></td>
+                    <td><span th:text="${el.wasteAmount}" th:attr="id='wasteAmountSpan' + ${el.id}"></span><input type="hidden" th:attr="value=${el.wasteAmount}, id='wasteAmount' + ${el.id}" class="form-control" name="wasteAmount"></td>
+                    <div th:switch="${el.creationDate != ''}">
+                        <td th:case="${true}"><span th:text="${el.creationDate}" th:attr="id='wasteCreationDateSpan' + ${el.id}"></span><input type="hidden" th:attr="value=${el.creationDate}, id='creationDate' + ${el.id}" class="form-control" name="creationDate"></td>
+                        <td th:case="${false}"><span th:text="' '"></span><input type="hidden" class="form-control" style="width:50%" th:attr="id='creationDate' + ${el.id}" name="creationDate" placeholder="Дата образования"></td>
+                    </div>
+                    <div th:switch="${el.exportDate != ''}">
+                        <td th:case="${true}"><span th:text="${el.exportDate}" th:attr="id='wasteExportDateSpan' + ${el.id}"></span><input type="hidden" th:attr="value=${el.exportDate}, id='exportDate' + ${el.id}" class="form-control" style="width:50%" name="exportDate"></td>
+                        <td th:case="${false}"><span th:text="' '"></span><input type="hidden" class="form-control" style="width:50%" th:attr="id='exportDate' + ${el.id}" name="exportDate" placeholder="Дата вывоза"></td>
+                    </div>
+                    <td>
+                        <div th:switch="${#lists.isEmpty(user)}">
+
+                            <div th:case="${false}">
+                                <div th:each="element, ind : ${user}" th:if="${ind.index} == 1">
+                                    <div th:if="${element} == 'admin' or ${el.owner} == ${user.get(0)}">
+<!--                                        <div class="submit show" th:attr="id='show' + ${el.id}">-->
+<!--                                            <button type="submit" class="btn btn-primary">Submit</button>-->
+<!--                                        </div>-->
+                                        <div th:attr="id='buttonsBlockShow' + ${el.id}">
+                                            <div class="submit showButt">
+                                                <div class="submit show" th:attr="id='show' + ${el.id}">
+                                                    <button type="submit" th:formaction="@{show}" class="btn btn-success">Готово</button>
+                                                </div>
+                                            </div>
+
+                                            <div class="cancelButt" th:data-parameter="${el.id}" th:onclick="cancel(this.getAttribute('data-parameter'))">
+                                                <button type="button" class="btn btn-danger cancel" th:attr="id='cancel' + ${el.id}">Отменить</button>
+                                            </div>
+
+                                            <div class="submit deleteButt"  th:data-parameter="${el.id}" th:onclick="delete(this.getAttribute('data-parameter'))">
+                                                <button type="submit" th:formaction="@{delete}" class="btn btn-danger delete" th:attr="id='delete' + ${el.id}">Удалить</button>
+                                            </div>
+
+                                            <div class="edit" th:attr="id='edit' + ${el.id}" th:data-parameter="${el.id}" th:onclick="edit(this.getAttribute('data-parameter'))">
+                                                <button type="button" class="btn btn-default btn-sm">
+                                                    <span class="glyphicon glyphicon-pencil"></span> Редактировать
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <span th:case="${true}"></span>
+                        </div>
+                    </td>
+                </form>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <span th:text="${totalPages}" id="totalPages" style="display: none;"></span>
+    <nav aria-label="..." id="pagination">
+        <ul class="pagination">
+            <li class="page-item disabled">
+                <span class="page-link">Назад</span>
+            </li>
+            <li class="page-item" id="page1"><a class="page-link" id="page1Text"></a></li>
+            <li class="page-item" id="page2"><a class="page-link" id="page2Text"></a></li>
+            <li class="page-item" id="page3"><a class="page-link" id="page3Text"></a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Вперёд</a>
+            </li>
+        </ul>
+    </nav>
+</section>
+
+
+<link rel="stylesheet" href="css/bootstrap.min.css"/>
+<!-- 2. Подключить CSS-файл библиотеки Bootstrap 3 DateTimePicker -->
+<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+
+<!-- 3. Подключить библиотеку jQuery -->
+<script src="js/jquery.min.js"></script>
+<!-- 4. Подключить библиотеку moment -->
+<script src="js/moment-with-locales.min.js"></script>
+<!-- 5. Подключить js-файл фреймворка Bootstrap 3 -->
+<script src="js/bootstrap.min.js"></script>
+<!-- 6. Подключить js-файл библиотеки Bootstrap 3 DateTimePicker -->
+<script src="js/bootstrap-datetimepicker.min.js"></script>
+
+</body>
+</html>
